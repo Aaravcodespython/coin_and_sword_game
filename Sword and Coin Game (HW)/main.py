@@ -38,6 +38,9 @@ def make_actors(num_hazards):
     for i in range(num_hazards):
         actors_to_make.append(random.choice(hazards))
 
+    #random.shuffle(actors_to_make)
+    #print(actors_to_make)
+
     #creating actors using the selected images   
     new_actors = []
     for img in actors_to_make:
@@ -46,7 +49,24 @@ def make_actors(num_hazards):
     
     #positioning the actors based on gaps
     num_gap = len(new_actors)+1
-
+    gap_size = WIDTH//num_gap
+    
+    #shuffling new_actors list
+    random.shuffle(new_actors)
+    
+    #using for loop to set coordinate of each actor by their index number and their gap size
+    #enumerate() is a function applied on a list to get the list item and its index number
+    for index,actor in enumerate(new_actors):
+        x_pos = (index+1)*gap_size
+        actor.x = x_pos
+        actor.y = 0
+    
+    #adding animations to actors
+    for actor in new_actors:
         
+
+    return new_actors
+        
+items = make_actors(start_level)
 
 pgzrun.go()
