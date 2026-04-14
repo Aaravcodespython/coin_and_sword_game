@@ -61,12 +61,56 @@ def make_actors(num_hazards):
         actor.x = x_pos
         actor.y = 0
     
-    #adding animations to actors
-    for actor in new_actors:
-        
+    animate_actors(new_actors)
 
     return new_actors
-        
-items = make_actors(start_level)
+
+def handle_game_over():
+    global game_over
+    game_over = True
+
+def handle_game_complete():
+    global start_level,game_complete,items,animations
+    stop_animation(animations)
+    if start_level == final_level:
+        game_complete = True
+    else:
+        items = []
+        animations = []
+        start_level += 1
+
+
+#function for animating the actors
+def animate_actors(actors_to_animate):
+    global animations
+    
+    for actor in actors_to_animate:
+        current_speed = start_speed - start_level
+        actor.anchor = ("center","bottom")
+        animation = animate(actor,duration = current_speed,on_finished = handle_game_over,y = HEIGHT)
+        animations.append(animation)    
+
+def stop_animation(actors_to_stop_animation):
+    actors_to_stop_animation
+
+    for actor in actors_to_stop_animation:
+        if actor.running:
+            actor.stop()
+
+
+def update():
+    global items
+    if len(items) == 0:
+        items = make_actors(start_level)
+
+def on_mouse_down(pos):
+    global items, start_level
+
+    for item in items:
+        if item.collidepoint(pos):
+            if "cartoon_coin" in item.image:
+                handle_game_complete()
+            else:
+                handle_game_over()
 
 pgzrun.go()
